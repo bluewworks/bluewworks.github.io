@@ -169,7 +169,7 @@ sorttable = {
     for (var i=0; i<table.tBodies[0].rows.length; i++) {
       text = sorttable.getInnerText(table.tBodies[0].rows[i].cells[column]);
       if (text != '') {
-        if (text.match(/^-?[ï¿½$ï¿½]?[\d,.]+%?$/)) {
+        if (text.match(/^-?[£$¤]?[\d,.]+%?$/)) {
           return sorttable.sort_numeric;
         }
         // check for a date: dd/mm/yyyy or dd/mm/yy 
@@ -456,6 +456,18 @@ if (!Array.forEach) { // mozilla already supports this
 // generic enumeration
 Function.prototype.forEach = function(object, block, context) {
 	for (var key in object) {
+		if (typeof this.prototype[key] == "undefined") {
+			block.call(context, object[key], key, object);
+		}
+	}
+};
+
+// character enumeration
+String.forEach = function(string, block, context) {
+	Array.forEach(string.split(""), function(chr, index) {
+		block.call(context, chr, index, string);
+	});
+};
 
 // globally resolve forEach enumeration
 var forEach = function(object, block, context) {
